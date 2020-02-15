@@ -1,3 +1,13 @@
+# Forked from https://github.com/diogobernardino/williamchart
+
+### Changes: 
+- Displaying integer values in axis instead of floating numbers
+
+
+### Todo
+- Add tooltip for barchart
+
+
 # williamchart ![phone][2]![watch][3]
 
 [![Kotlin Version](https://img.shields.io/badge/kotlin-1.3.50-blue.svg)](https://kotlinlang.org)
@@ -13,12 +23,19 @@ Note: WilliamChart v3 has been completely re-written from scratch in Kotlin and 
 ### Gradle 
 
 ``` groovy
-implementation 'com.diogobernardino:williamchart:3.3.0'
+implementation 'com.github.umairfeduni:williamchart:0.0.1'
 ```
 
 If you find this library useful and decide to use it in your projects please drop me a line [@dfbernardino][1], I will be happy to know about it.
 
 ### Usage
+Display values as integer numbers
+```xml
+  ...
+  app:chart_labelsDisplayInteger=[ "true" | "false" ]
+  ... 
+
+```
 
 #### All charts
 
@@ -40,6 +57,7 @@ If you find this library useful and decide to use it in your projects please dro
   app:chart_lineThickness="dimension"
   app:chart_smoothLine=[ "true" | "false" ]
   app:chart_pointDrawable="drawable" 
+  app:chart_labelsDisplayInteger=[ "true" | "false" ]                                        
 />
 ```
 
@@ -52,6 +70,7 @@ If you find this library useful and decide to use it in your projects please dro
   app:chart_barsColor="color"
   app:chart_barsBackgroundColor="color"
   app:chart_barsRadius="dimension" 
+  app:chart_labelsDisplayInteger=[ "true" | "false" ]
 />
 ```
 
