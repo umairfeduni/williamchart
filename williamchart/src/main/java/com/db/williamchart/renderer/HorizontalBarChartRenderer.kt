@@ -1,19 +1,12 @@
 package com.db.williamchart.renderer
 
+import android.graphics.Paint
+import android.graphics.RectF
 import com.db.williamchart.ChartContract
 import com.db.williamchart.Painter
 import com.db.williamchart.animation.ChartAnimation
-import com.db.williamchart.data.BarChartConfiguration
-import com.db.williamchart.data.ChartConfiguration
-import com.db.williamchart.data.DataPoint
-import com.db.williamchart.data.Frame
-import com.db.williamchart.data.Label
-import com.db.williamchart.data.Scale
-import com.db.williamchart.data.notInitialized
-import com.db.williamchart.data.shouldDisplayAxisX
-import com.db.williamchart.data.shouldDisplayAxisY
+import com.db.williamchart.data.*
 import com.db.williamchart.data.toOuterFrame
-import com.db.williamchart.data.withPaddings
 import com.db.williamchart.extensions.limits
 import com.db.williamchart.extensions.maxValueBy
 import com.db.williamchart.extensions.toDataPoints
@@ -27,6 +20,9 @@ class HorizontalBarChartRenderer(
     private val painter: Painter,
     private var animation: ChartAnimation<DataPoint>
 ) : ChartContract.Renderer {
+
+    private var touchedBar : Bar? = null
+    private var bars = emptyList<Bar>()
 
     private var data = emptyList<DataPoint>()
 
@@ -99,7 +95,10 @@ class HorizontalBarChartRenderer(
 
         placeDataPoints(innerFrame)
 
+        bars = processData(data)
+
         animation.animateFrom(innerFrame.bottom, data) { view.postInvalidate() }
+
 
         return false
     }
@@ -117,7 +116,7 @@ class HorizontalBarChartRenderer(
         if (chartConfiguration.barsBackgroundColor != -1)
             view.drawBarsBackground(data, innerFrame)
 
-        view.drawBars(data, innerFrame)
+        view.drawBars(bars, innerFrame)
 
         if (RendererConstants.inDebug) {
             view.drawDebugFrame(
@@ -143,6 +142,10 @@ class HorizontalBarChartRenderer(
         data = entries.toDataPoints()
         this.animation = animation
         view.postInvalidate()
+    }
+
+    override fun showToolTip(x: Float, y: Float) {
+
     }
 
     private fun placeLabelsX(innerFrame: Frame) {
@@ -200,4 +203,27 @@ class HorizontalBarChartRenderer(
                     heightBetweenLabels * index
         }
     }
+
+
+    fun processData(points: List<DataPoint>) : ArrayList<Bar>{
+        val halfBarWidth =
+                (innerFrame.bottom - innerFrame.top - (points.size + 1) * chartConfiguration.spacing) / points.size / 2
+
+        val list = ArrayList<Bar>()
+        points.forEach {
+            list.add(
+                    Bar(
+                            view.getFormattedLabel(it.value.toString()),
+                            Label(it.label,it.screenPositionX,it.screenPositionY),
+                            RectF(innerFrame.left,
+                                    it.screenPositionY - halfBarWidth,
+                                    it.screenPositionX,
+                                    it.screenPositionY + halfBarWidth)
+                    )
+            )
+        }
+
+        return list
+    }
+
 }

@@ -22,7 +22,7 @@ android {
         applicationId "com.db.williamchartdemo"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 20
+        versionCode 21
         versionName rootProject.williamchartVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,6 +33,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
 }
 
 dependencies {

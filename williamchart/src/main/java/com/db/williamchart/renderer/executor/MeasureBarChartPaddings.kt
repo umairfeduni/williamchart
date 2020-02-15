@@ -27,7 +27,7 @@ class MeasureBarChartPaddings {
     ): Paddings {
         return Paddings(
             left = 0F,
-            top = 0F,
+            top = labelsHeight,
             right = 0f,
             bottom = if (axisType.shouldDisplayAxisX()) labelsHeight + labelsPaddingToInnerChart else 0F
         )

@@ -1,9 +1,19 @@
 package com.db.williamchart.extensions
 
 import android.graphics.Path
+import com.db.williamchart.data.Bar
 import com.db.williamchart.data.DataPoint
 import com.db.williamchart.data.Label
 import com.db.williamchart.data.Scale
+
+fun List<Bar>.mapPoint( x : Float, y: Float) : Bar?{
+    for(bar in this){
+        if(bar.rectF.contains(x,y))
+            return bar
+    }
+    return null
+}
+
 
 fun List<DataPoint>.limits(): Pair<Float, Float> {
 

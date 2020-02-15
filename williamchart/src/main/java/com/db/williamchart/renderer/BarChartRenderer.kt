@@ -1,23 +1,15 @@
 package com.db.williamchart.renderer
 
+import android.graphics.Paint
+import android.graphics.RectF
+import android.view.MotionEvent
 import com.db.williamchart.ChartContract
 import com.db.williamchart.Painter
 import com.db.williamchart.animation.ChartAnimation
-import com.db.williamchart.data.BarChartConfiguration
-import com.db.williamchart.data.ChartConfiguration
-import com.db.williamchart.data.DataPoint
-import com.db.williamchart.data.Frame
-import com.db.williamchart.data.Label
-import com.db.williamchart.data.Scale
-import com.db.williamchart.data.notInitialized
-import com.db.williamchart.data.shouldDisplayAxisX
-import com.db.williamchart.data.shouldDisplayAxisY
+import com.db.williamchart.data.*
 import com.db.williamchart.data.toOuterFrame
-import com.db.williamchart.data.withPaddings
-import com.db.williamchart.extensions.limits
-import com.db.williamchart.extensions.maxValueBy
+import com.db.williamchart.extensions.*
 import com.db.williamchart.extensions.toDataPoints
-import com.db.williamchart.extensions.toLabels
 import com.db.williamchart.renderer.executor.DebugWithLabelsFrame
 import com.db.williamchart.renderer.executor.MeasureBarChartPaddings
 import kotlin.math.max
@@ -27,6 +19,10 @@ class BarChartRenderer(
     private val painter: Painter,
     private var animation: ChartAnimation<DataPoint>
 ) : ChartContract.Renderer {
+
+
+    private var touchedBar : Bar? = null
+    private var bars = emptyList<Bar>()
 
     private var data = emptyList<DataPoint>()
 
@@ -94,8 +90,10 @@ class BarChartRenderer(
             placeLabelsY(innerFrame)
 
         placeDataPoints(innerFrame)
+        bars = processData(data)
 
         animation.animateFrom(innerFrame.bottom, data) { view.postInvalidate() }
+
 
         return false
     }
@@ -113,7 +111,11 @@ class BarChartRenderer(
         if (chartConfiguration.barsBackgroundColor != -1)
             view.drawBarsBackground(data, innerFrame)
 
-        view.drawBars(data, innerFrame)
+        view.drawBars(bars, innerFrame)
+
+        if(touchedBar != null)
+            view.drawToolTip(touchedBar!!)
+
 
         if (RendererConstants.inDebug) {
             view.drawDebugFrame(
@@ -128,6 +130,7 @@ class BarChartRenderer(
                 )
             )
         }
+
     }
 
     override fun render(entries: LinkedHashMap<String, Float>) {
@@ -138,6 +141,11 @@ class BarChartRenderer(
     override fun anim(entries: LinkedHashMap<String, Float>, animation: ChartAnimation<DataPoint>) {
         data = entries.toDataPoints()
         this.animation = animation
+        view.postInvalidate()
+    }
+
+    override fun showToolTip(x: Float, y: Float) {
+        touchedBar = bars.mapPoint(x,y)
         view.postInvalidate()
     }
 
@@ -194,4 +202,28 @@ class BarChartRenderer(
                     ) / scaleSize)
         }
     }
+
+
+    fun processData(points: List<DataPoint>) : ArrayList<Bar>{
+        val halfBarWidth =
+                (innerFrame.right - innerFrame.left - (points.size + 1) * chartConfiguration.spacing) / points.size / 2
+
+        val list = ArrayList<Bar>()
+        points.forEach {
+            list.add(
+                Bar(
+                        view.getFormattedLabel(it.value.toString()),
+                        Label(it.label,it.screenPositionX,it.screenPositionY),
+                        RectF(it.screenPositionX - halfBarWidth,
+                        it.screenPositionY,
+                        it.screenPositionX + halfBarWidth,
+                        innerFrame.bottom
+                        )
+                )
+            )
+        }
+
+        return list
+    }
+
 }

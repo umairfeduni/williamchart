@@ -174,8 +174,13 @@ class LineChartView @JvmOverloads constructor(
     }
 
     override fun getFormattedLabel(label : String) : String{
-        if(displayInteger && label.toFloatOrNull() != null){
-            return label.toFloat().toInt().toString()
+        val value = label.toFloatOrNull()
+        if(value!= null) {
+            return if (displayInteger) {
+                label.toFloat().toInt().toString()
+            }else{
+                String.format("%.1f",label.toFloat())
+            }
         }
         return label
     }

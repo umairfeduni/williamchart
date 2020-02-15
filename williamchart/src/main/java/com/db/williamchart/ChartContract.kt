@@ -1,12 +1,8 @@
 package com.db.williamchart
 
+import android.graphics.RectF
 import com.db.williamchart.animation.ChartAnimation
-import com.db.williamchart.data.ChartConfiguration
-import com.db.williamchart.data.DataPoint
-import com.db.williamchart.data.DonutChartConfiguration
-import com.db.williamchart.data.DonutDataPoint
-import com.db.williamchart.data.Frame
-import com.db.williamchart.data.Label
+import com.db.williamchart.data.*
 
 interface ChartContract {
 
@@ -27,7 +23,7 @@ interface ChartContract {
     interface BarView {
         fun postInvalidate()
         fun drawLabels(xLabels: List<Label>)
-        fun drawBars(points: List<DataPoint>, innerFrame: Frame)
+        fun drawBars(points: List<Bar>, innerFrame: Frame)
         fun drawBarsBackground(points: List<DataPoint>, innerFrame: Frame)
         fun getFormattedLabel(label : String) : String
         fun drawDebugFrame(
@@ -35,6 +31,7 @@ interface ChartContract {
             innerFrame: Frame,
             labelsFrame: List<Frame>
         )
+        fun drawToolTip( bar: Bar)
     }
 
     interface DonutView {
@@ -49,6 +46,7 @@ interface ChartContract {
         fun draw()
         fun render(entries: LinkedHashMap<String, Float>)
         fun anim(entries: LinkedHashMap<String, Float>, animation: ChartAnimation<DataPoint>)
+        fun showToolTip(x : Float, y : Float)
     }
 
     interface DonutRenderer {

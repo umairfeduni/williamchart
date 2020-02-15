@@ -139,6 +139,10 @@ class LineChartRenderer(
         view.postInvalidate()
     }
 
+    override fun showToolTip(x: Float, y: Float) {
+
+    }
+
     private fun placeLabelsX(innerFrame: Frame) {
 
         val labelsLeftPosition =

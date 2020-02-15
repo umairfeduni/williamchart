@@ -2,6 +2,7 @@ package com.db.williamchart.view
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
@@ -10,13 +11,8 @@ import com.db.williamchart.ChartContract
 import com.db.williamchart.R
 import com.db.williamchart.animation.DefaultHorizontalAnimation
 import com.db.williamchart.animation.NoAnimation
-import com.db.williamchart.data.BarChartConfiguration
-import com.db.williamchart.data.ChartConfiguration
-import com.db.williamchart.data.DataPoint
-import com.db.williamchart.data.Frame
-import com.db.williamchart.data.Label
-import com.db.williamchart.data.Paddings
-import com.db.williamchart.data.toRect
+import com.db.williamchart.data.*
+import com.db.williamchart.extensions.drawChartBar
 import com.db.williamchart.extensions.obtainStyledAttributes
 import com.db.williamchart.renderer.HorizontalBarChartRenderer
 
@@ -32,6 +28,10 @@ class HorizontalBarChartView @JvmOverloads constructor(
     @ColorInt
     @Suppress("MemberVisibilityCanBePrivate")
     var barsColor: Int = defaultBarsColor
+
+    @ColorInt
+    @Suppress("MemberVisibilityCanBePrivate")
+    var barSelectColor : Int = defaultBarSelectedColor
 
     @Suppress("MemberVisibilityCanBePrivate")
     var barRadius: Float = defaultBarsRadius
@@ -53,6 +53,7 @@ class HorizontalBarChartView @JvmOverloads constructor(
             axis,
             labelsSize,
             scale,
+            spacing,
             labelsFormatter,
             barsBackgroundColor,
             displayInteger
@@ -66,22 +67,13 @@ class HorizontalBarChartView @JvmOverloads constructor(
     }
 
     override fun drawBars(
-        points: List<DataPoint>,
+        points: List<Bar>,
         innerFrame: Frame
     ) {
-
-        val halfBarWidth =
-            (innerFrame.bottom - innerFrame.top - (points.size + 1) * spacing) / points.size / 2
-
         painter.prepare(color = barsColor, style = Paint.Style.FILL)
-        points.forEach {
+        points.forEach {bar ->
             canvas.drawRoundRect(
-                RectF(
-                    innerFrame.left,
-                    it.screenPositionY - halfBarWidth,
-                    it.screenPositionX,
-                    it.screenPositionY + halfBarWidth
-                ),
+                bar.rectF,
                 barRadius,
                 barRadius,
                 painter.paint
@@ -128,6 +120,7 @@ class HorizontalBarChartView @JvmOverloads constructor(
         }
     }
 
+
     override fun drawDebugFrame(outerFrame: Frame, innerFrame: Frame, labelsFrame: List<Frame>) {
         painter.prepare(color = -0x1000000, style = Paint.Style.STROKE)
         canvas.drawRect(outerFrame.toRect(), painter.paint)
@@ -135,19 +128,32 @@ class HorizontalBarChartView @JvmOverloads constructor(
         labelsFrame.forEach { canvas.drawRect(it.toRect(), painter.paint) }
     }
 
+    override fun drawToolTip( bar: Bar)  {
+
+        painter.prepare(color = barSelectColor, style = Paint.Style.FILL)
+
+        canvas.drawChartBar(bar.rectF, barRadius, painter.paint)
+    }
+
     private fun handleAttributes(typedArray: TypedArray) {
         typedArray.apply {
             spacing = getDimension(R.styleable.BarChartAttrs_chart_spacing, spacing)
             barsColor = getColor(R.styleable.BarChartAttrs_chart_barsColor, barsColor)
             barRadius = getDimension(R.styleable.BarChartAttrs_chart_barsRadius, barRadius)
+            barSelectColor = getColor(R.styleable.BarChartAttrs_chart_barSelectedColor, barSelectColor)
             barsBackgroundColor =
                 getColor(R.styleable.BarChartAttrs_chart_barsBackgroundColor, barsBackgroundColor)
             recycle()
         }
     }
     override fun getFormattedLabel(label : String) : String{
-        if(displayInteger && label.toFloatOrNull() != null){
-            return label.toFloat().toInt().toString()
+        val value = label.toFloatOrNull()
+        if(value!= null) {
+            return if (displayInteger) {
+                label.toFloat().toInt().toString()
+            }else{
+                String.format("%.1f",label.toFloat())
+            }
         }
         return label
     }
@@ -156,6 +162,7 @@ class HorizontalBarChartView @JvmOverloads constructor(
         private const val defaultSpacing = 10f
         private const val defaultBarsColor = -0x1000000
         private const val defaultBarsRadius = 0F
+        private const val defaultBarSelectedColor = Color.GRAY
 
     }
 }

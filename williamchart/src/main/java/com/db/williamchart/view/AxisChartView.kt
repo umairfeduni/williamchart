@@ -5,6 +5,7 @@ import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
@@ -141,5 +142,17 @@ abstract class AxisChartView @JvmOverloads constructor(
                 "Label3" to 4.7f,
                 "Label4" to 3.5f
             )
+    }
+
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+
+        when(event?.action){
+            MotionEvent.ACTION_DOWN -> {
+                renderer.showToolTip(event.x, event.y)
+            }
+        }
+
+        return super.onTouchEvent(event)
     }
 }
