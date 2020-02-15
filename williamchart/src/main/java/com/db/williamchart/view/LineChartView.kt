@@ -73,7 +73,8 @@ class LineChartView @JvmOverloads constructor(
                     getDrawable(pointsDrawableRes)!!.intrinsicHeight else -1,
                 fillColor = fillColor,
                 gradientFillColors = gradientFillColors,
-                labelsFormatter = labelsFormatter
+                labelsFormatter = labelsFormatter,
+                displayInteger = displayInteger
             )
 
     init {
@@ -119,7 +120,7 @@ class LineChartView @JvmOverloads constructor(
         )
         xLabels.forEach {
             canvas.drawText(
-                it.label,
+                getFormattedLabel(it.label),
                 it.screenPositionX,
                 it.screenPositionY,
                 painter.paint
@@ -170,6 +171,13 @@ class LineChartView @JvmOverloads constructor(
                 getResourceId(R.styleable.LineChartAttrs_chart_pointsDrawable, pointsDrawableRes)
             recycle()
         }
+    }
+
+    override fun getFormattedLabel(label : String) : String{
+        if(displayInteger && label.toFloatOrNull() != null){
+            return label.toFloat().toInt().toString()
+        }
+        return label
     }
 
     companion object {

@@ -40,6 +40,7 @@ class BarChartView @JvmOverloads constructor(
     @Suppress("MemberVisibilityCanBePrivate")
     var barsBackgroundColor: Int = -1
 
+
     override val chartConfiguration: ChartConfiguration
         get() =
             BarChartConfiguration(
@@ -55,7 +56,8 @@ class BarChartView @JvmOverloads constructor(
                 labelsSize = labelsSize,
                 scale = scale,
                 barsBackgroundColor = barsBackgroundColor,
-                labelsFormatter = labelsFormatter
+                labelsFormatter = labelsFormatter,
+                displayInteger = displayInteger
             )
 
     init {
@@ -110,13 +112,16 @@ class BarChartView @JvmOverloads constructor(
         )
         xLabels.forEach {
             canvas.drawText(
-                it.label,
+                getFormattedLabel(it.label),
                 it.screenPositionX,
                 it.screenPositionY,
                 painter.paint
             )
         }
     }
+
+
+
 
     override fun drawDebugFrame(outerFrame: Frame, innerFrame: Frame, labelsFrame: List<Frame>) {
         painter.prepare(color = -0x1000000, style = Paint.Style.STROKE)
@@ -134,6 +139,14 @@ class BarChartView @JvmOverloads constructor(
                 getColor(R.styleable.BarChartAttrs_chart_barsBackgroundColor, barsBackgroundColor)
             recycle()
         }
+    }
+
+
+    override fun getFormattedLabel(label : String) : String{
+        if(displayInteger && label.toFloatOrNull() != null){
+            return label.toFloat().toInt().toString()
+        }
+        return label
     }
 
     companion object {

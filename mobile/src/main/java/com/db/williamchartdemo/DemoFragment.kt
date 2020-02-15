@@ -10,7 +10,7 @@ import com.db.williamchart.view.ImplementsAlphaChart
 import kotlinx.android.synthetic.main.demo_fragment.*
 
 @ImplementsAlphaChart
-class DemoFragment : Fragment() {
+class  DemoFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

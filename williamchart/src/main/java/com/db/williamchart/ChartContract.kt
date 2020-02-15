@@ -16,6 +16,7 @@ interface ChartContract {
         fun drawLine(points: List<DataPoint>)
         fun drawLineBackground(innerFrame: Frame, points: List<DataPoint>)
         fun drawPoints(points: List<DataPoint>)
+        fun getFormattedLabel(label : String) : String
         fun drawDebugFrame(
             outerFrame: Frame,
             innerFrame: Frame,
@@ -28,6 +29,7 @@ interface ChartContract {
         fun drawLabels(xLabels: List<Label>)
         fun drawBars(points: List<DataPoint>, innerFrame: Frame)
         fun drawBarsBackground(points: List<DataPoint>, innerFrame: Frame)
+        fun getFormattedLabel(label : String) : String
         fun drawDebugFrame(
             outerFrame: Frame,
             innerFrame: Frame,

@@ -40,6 +40,8 @@ abstract class AxisChartView @JvmOverloads constructor(
 
     var animation: ChartAnimation<DataPoint> = DefaultAnimation()
 
+    var displayInteger: Boolean = defaultDisplayInteger
+
     protected lateinit var canvas: Canvas
 
     protected val painter: Painter = Painter(labelsFont = labelsFont)
@@ -115,6 +117,8 @@ abstract class AxisChartView @JvmOverloads constructor(
                 painter.labelsFont = labelsFont
             }
 
+            displayInteger = getBoolean(R.styleable.ChartAttrs_chart_labelsDisplayInteger, displayInteger)
+
             recycle()
         }
     }
@@ -129,6 +133,7 @@ abstract class AxisChartView @JvmOverloads constructor(
         private const val defaultFrameWidth = 200
         private const val defaultFrameHeight = 100
         private const val defaultLabelsSize = 60F
+        private const val defaultDisplayInteger = false
         private val editModeSampleData =
             linkedMapOf(
                 "Label1" to 1f,

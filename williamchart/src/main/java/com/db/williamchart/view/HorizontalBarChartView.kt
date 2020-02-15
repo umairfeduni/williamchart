@@ -39,6 +39,7 @@ class HorizontalBarChartView @JvmOverloads constructor(
     @Suppress("MemberVisibilityCanBePrivate")
     var barsBackgroundColor: Int = -1
 
+
     override val chartConfiguration: ChartConfiguration
         get() = BarChartConfiguration(
             measuredWidth,
@@ -53,7 +54,8 @@ class HorizontalBarChartView @JvmOverloads constructor(
             labelsSize,
             scale,
             labelsFormatter,
-            barsBackgroundColor
+            barsBackgroundColor,
+            displayInteger
         )
 
     init {
@@ -143,10 +145,17 @@ class HorizontalBarChartView @JvmOverloads constructor(
             recycle()
         }
     }
+    override fun getFormattedLabel(label : String) : String{
+        if(displayInteger && label.toFloatOrNull() != null){
+            return label.toFloat().toInt().toString()
+        }
+        return label
+    }
 
     companion object {
         private const val defaultSpacing = 10f
         private const val defaultBarsColor = -0x1000000
         private const val defaultBarsRadius = 0F
+
     }
 }

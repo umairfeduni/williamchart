@@ -11,6 +11,7 @@
         <attr name="chart_labelsColor" format="color" />
         <attr name="chart_labelsSize" format="dimension" />
         <attr name="chart_labelsFont" format="reference" />
+        <attr name="chart_labelsDisplayInteger" format="boolean" />
 
     </declare-styleable>
 
