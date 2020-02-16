@@ -67,16 +67,25 @@ class HorizontalBarChartView @JvmOverloads constructor(
     }
 
     override fun drawBars(
-        points: List<Bar>,
-        innerFrame: Frame
+            points: List<DataPoint>,
+            innerFrame: Frame
     ) {
+
+        val halfBarWidth =
+                (innerFrame.bottom - innerFrame.top - (points.size + 1) * spacing) / points.size / 2
+
         painter.prepare(color = barsColor, style = Paint.Style.FILL)
-        points.forEach {bar ->
+        points.forEach {
             canvas.drawRoundRect(
-                bar.rectF,
-                barRadius,
-                barRadius,
-                painter.paint
+                    RectF(
+                            innerFrame.left,
+                            it.screenPositionY - halfBarWidth,
+                            it.screenPositionX,
+                            it.screenPositionY + halfBarWidth
+                    ),
+                    barRadius,
+                    barRadius,
+                    painter.paint
             )
         }
     }

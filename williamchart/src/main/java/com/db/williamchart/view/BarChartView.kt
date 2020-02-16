@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import androidx.annotation.ColorInt
 import com.db.williamchart.ChartContract
@@ -67,12 +68,22 @@ class BarChartView @JvmOverloads constructor(
     }
 
     override fun drawBars(
-        points: List<Bar>,
-        innerFrame: Frame
+            points: List<DataPoint>,
+            innerFrame: Frame
     ) {
+
+        val halfBarWidth =
+                (innerFrame.right - innerFrame.left - (points.size + 1) * spacing) / points.size / 2
+
         painter.prepare(color = barsColor, style = Paint.Style.FILL)
-        points.forEach { bar->
-            canvas.drawChartBar(bar.rectF, barRadius, painter.paint)
+        points.forEach {
+            val bar = RectF(
+                    it.screenPositionX - halfBarWidth,
+                    it.screenPositionY,
+                    it.screenPositionX + halfBarWidth,
+                    innerFrame.bottom
+            )
+            canvas.drawChartBar(bar, barRadius, painter.paint)
         }
     }
 
@@ -117,8 +128,7 @@ class BarChartView @JvmOverloads constructor(
         labelsFrame.forEach { canvas.drawRect(it.toRect(), painter.paint) }
     }
 
-    override fun drawToolTip(
-            bar: Bar){
+    override fun drawToolTip(bar: Bar){
 
         painter.prepare(color = barSelectColor, style = Paint.Style.FILL)
 
@@ -148,7 +158,6 @@ class BarChartView @JvmOverloads constructor(
             recycle()
         }
     }
-
 
     override fun getFormattedLabel(label : String) : String{
         val value = label.toFloatOrNull()

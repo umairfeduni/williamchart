@@ -143,6 +143,10 @@ class LineChartRenderer(
 
     }
 
+    override fun removeToolTip() {
+
+    }
+
     private fun placeLabelsX(innerFrame: Frame) {
 
         val labelsLeftPosition =

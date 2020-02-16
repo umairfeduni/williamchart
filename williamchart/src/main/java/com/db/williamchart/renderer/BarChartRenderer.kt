@@ -90,7 +90,7 @@ class BarChartRenderer(
             placeLabelsY(innerFrame)
 
         placeDataPoints(innerFrame)
-        bars = processData(data)
+        bars = estimateBarSize(data)
 
         animation.animateFrom(innerFrame.bottom, data) { view.postInvalidate() }
 
@@ -111,11 +111,10 @@ class BarChartRenderer(
         if (chartConfiguration.barsBackgroundColor != -1)
             view.drawBarsBackground(data, innerFrame)
 
-        view.drawBars(bars, innerFrame)
+        view.drawBars(data, innerFrame)
 
         if(touchedBar != null)
             view.drawToolTip(touchedBar!!)
-
 
         if (RendererConstants.inDebug) {
             view.drawDebugFrame(
@@ -146,6 +145,11 @@ class BarChartRenderer(
 
     override fun showToolTip(x: Float, y: Float) {
         touchedBar = bars.mapPoint(x,y)
+        view.postInvalidate()
+    }
+
+    override fun removeToolTip() {
+        touchedBar = null
         view.postInvalidate()
     }
 
@@ -204,7 +208,7 @@ class BarChartRenderer(
     }
 
 
-    fun processData(points: List<DataPoint>) : ArrayList<Bar>{
+    private fun estimateBarSize(points: List<DataPoint>) : ArrayList<Bar>{
         val halfBarWidth =
                 (innerFrame.right - innerFrame.left - (points.size + 1) * chartConfiguration.spacing) / points.size / 2
 

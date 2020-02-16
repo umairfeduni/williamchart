@@ -1,16 +1,11 @@
 package com.db.williamchart.renderer
 
-import android.graphics.Paint
 import android.graphics.RectF
 import com.db.williamchart.ChartContract
 import com.db.williamchart.Painter
 import com.db.williamchart.animation.ChartAnimation
 import com.db.williamchart.data.*
-import com.db.williamchart.data.toOuterFrame
-import com.db.williamchart.extensions.limits
-import com.db.williamchart.extensions.maxValueBy
-import com.db.williamchart.extensions.toDataPoints
-import com.db.williamchart.extensions.toLabels
+import com.db.williamchart.extensions.*
 import com.db.williamchart.renderer.executor.DebugWithLabelsFrame
 import com.db.williamchart.renderer.executor.MeasureHorizontalBarChartPaddings
 import kotlin.math.max
@@ -95,7 +90,7 @@ class HorizontalBarChartRenderer(
 
         placeDataPoints(innerFrame)
 
-        bars = processData(data)
+        bars = estimateBarSize(data)
 
         animation.animateFrom(innerFrame.bottom, data) { view.postInvalidate() }
 
@@ -116,7 +111,10 @@ class HorizontalBarChartRenderer(
         if (chartConfiguration.barsBackgroundColor != -1)
             view.drawBarsBackground(data, innerFrame)
 
-        view.drawBars(bars, innerFrame)
+        view.drawBars(data, innerFrame)
+
+        if(touchedBar != null)
+            view.drawToolTip(touchedBar!!)
 
         if (RendererConstants.inDebug) {
             view.drawDebugFrame(
@@ -145,7 +143,13 @@ class HorizontalBarChartRenderer(
     }
 
     override fun showToolTip(x: Float, y: Float) {
+        touchedBar = bars.mapPoint(x,y)
+        view.postInvalidate()
+    }
 
+    override fun removeToolTip() {
+        touchedBar = null
+        view.postInvalidate()
     }
 
     private fun placeLabelsX(innerFrame: Frame) {
@@ -205,7 +209,7 @@ class HorizontalBarChartRenderer(
     }
 
 
-    fun processData(points: List<DataPoint>) : ArrayList<Bar>{
+    private fun estimateBarSize(points: List<DataPoint>) : ArrayList<Bar>{
         val halfBarWidth =
                 (innerFrame.bottom - innerFrame.top - (points.size + 1) * chartConfiguration.spacing) / points.size / 2
 

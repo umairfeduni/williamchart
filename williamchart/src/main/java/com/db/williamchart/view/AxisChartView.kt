@@ -150,9 +150,16 @@ abstract class AxisChartView @JvmOverloads constructor(
         when(event?.action){
             MotionEvent.ACTION_DOWN -> {
                 renderer.showToolTip(event.x, event.y)
+                return true
             }
+            MotionEvent.ACTION_UP->{
+                renderer.removeToolTip()
+                return true
+            }
+
         }
 
-        return super.onTouchEvent(event)
+
+        return false
     }
 }

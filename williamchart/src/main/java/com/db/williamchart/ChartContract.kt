@@ -23,7 +23,7 @@ interface ChartContract {
     interface BarView {
         fun postInvalidate()
         fun drawLabels(xLabels: List<Label>)
-        fun drawBars(points: List<Bar>, innerFrame: Frame)
+        fun drawBars(points: List<DataPoint>, innerFrame: Frame)
         fun drawBarsBackground(points: List<DataPoint>, innerFrame: Frame)
         fun getFormattedLabel(label : String) : String
         fun drawDebugFrame(
@@ -47,6 +47,7 @@ interface ChartContract {
         fun render(entries: LinkedHashMap<String, Float>)
         fun anim(entries: LinkedHashMap<String, Float>, animation: ChartAnimation<DataPoint>)
         fun showToolTip(x : Float, y : Float)
+        fun removeToolTip()
     }
 
     interface DonutRenderer {
