@@ -1,11 +1,14 @@
 # Forked from https://github.com/diogobernardino/williamchart
 
+[![](https://jitpack.io/v/umairfeduni/williamchart.svg)](https://jitpack.io/#umairfeduni/williamchart)
+
 ### Changes: 
 - Displaying integer values in axis instead of floating numbers
+- Added tooltip for barchart
+- Customize selected bar color from xml
 
 
 ### Todo
-- Add tooltip for barchart
 
 
 # williamchart ![phone][2]![watch][3]
@@ -18,15 +21,13 @@ Williamchart is an Android Library to rapidly implement attractive and insightfu
 
 Note: WilliamChart v3 has been completely re-written from scratch in Kotlin and does not guarantee any API/features compatibility with previous versions. Android development has been evolving quickly, and much has changed since I first started developing williamchart (e.g patterns, testing, tools), so I decided it was time to rewrite it with all these new tools in mind. I intend to keep it as light and modular as possible.
 
-![screenshot][4]
 
 ### Gradle 
 
 ``` groovy
-implementation 'com.github.umairfeduni:williamchart:0.0.1'
+implementation 'com.github.umairfeduni:williamchart:0.0.2'
 ```
 
-If you find this library useful and decide to use it in your projects please drop me a line [@dfbernardino][1], I will be happy to know about it.
 
 ### Usage
 Display values as integer numbers
@@ -36,6 +37,16 @@ Display values as integer numbers
   ... 
 
 ```
+![screenshot][4]
+
+
+Set color for selected bar
+```xml
+  ...
+  app:chart_barSelectedColor="#FF9800"
+```
+![screenshot][5]
+
 
 #### All charts
 
@@ -71,6 +82,7 @@ Display values as integer numbers
   app:chart_barsBackgroundColor="color"
   app:chart_barsRadius="dimension" 
   app:chart_labelsDisplayInteger=[ "true" | "false" ]
+  app:chart_barSelectedColor="#FF9800"                                                              
 />
 ```
 
@@ -108,3 +120,4 @@ License
 [2]: ./art/phone.png
 [3]: ./art/watch.png
 [4]: ./art/demo_screenshot.png
+[5]: ./art/select_bar_chat.gif
