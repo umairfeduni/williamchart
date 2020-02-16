@@ -18,7 +18,7 @@ Williamchart is an Android Library to rapidly implement attractive and insightfu
 
 
 
-## I forked it from [![WilliamChart](https://img.shields.io/badge/Github-WilliamChart-%23000)](https://github.com/diogobernardino/williamchart) to add some features that I required for my app
+## I forked it from [![WilliamChart](https://img.shields.io/badge/Github-WilliamChart-%23000)](https://github.com/diogobernardino/williamchart) to add some features that I needed for my app
 
 ### Features Added: 
 - Displaying integer values in axis instead of floating numbers
