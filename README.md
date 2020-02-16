@@ -2,10 +2,7 @@
 
 [![](https://jitpack.io/v/umairfeduni/williamchart.svg)](https://jitpack.io/#umairfeduni/williamchart)
 
-### Changes: 
-- Displaying integer values in axis instead of floating numbers
-- Added tooltip for barchart
-- Customize selected bar color from xml
+
 
 
 ### Todo
@@ -19,13 +16,19 @@
 
 Williamchart is an Android Library to rapidly implement attractive and insightful charts in android applications.
 
-Note: WilliamChart v3 has been completely re-written from scratch in Kotlin and does not guarantee any API/features compatibility with previous versions. Android development has been evolving quickly, and much has changed since I first started developing williamchart (e.g patterns, testing, tools), so I decided it was time to rewrite it with all these new tools in mind. I intend to keep it as light and modular as possible.
 
+
+## I forked it from [![WilliamChart](https://img.shields.io/badge/Github-WilliamChart-%23000)](https://github.com/diogobernardino/williamchart) to add some features that I required for my app
+
+### Features Added: 
+- Displaying integer values in axis instead of floating numbers
+- Added tooltip for barchart
+- Customize selected bar color from xml
 
 ### Gradle 
 
 ``` groovy
-implementation 'com.github.umairfeduni:williamchart:0.0.2'
+implementation 'com.github.umairfeduni:williamchart:0.0.3'
 ```
 
 
